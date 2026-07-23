@@ -1,0 +1,113 @@
+<?php
+/**
+ * Deenz Organics - Terms & Conditions
+ */
+$page_title = "Terms & Conditions | Deenz Organics";
+$page_description = "Terms of Service and Purchase Conditions governing orders from Deenz Organics, Wanpora, Kulgam, Jammu & Kashmir.";
+require_once __DIR__ . '/includes/header.php';
+?>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
+    <!-- Page Header -->
+    <div class="border-b border-luxury-200 pb-8 space-y-2">
+        <div class="inline-flex items-center gap-2 bg-luxury-100 text-luxury-900 border border-luxury-200 text-[10px] font-display font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+            <i data-lucide="file-text" class="w-3.5 h-3.5 text-luxury-600"></i> Legal Operating Framework
+        </div>
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-luxury-950">Terms & Conditions</h1>
+        <p class="text-xs text-luxury-500 font-mono">Effective Date: July 22, 2026 | Deenz Organics, Wanpora, Kulgam, J&K - 192231</p>
+    </div>
+
+    <!-- Intro Card -->
+    <div class="bg-stone-50 border border-stone-200 rounded-2xl p-6 space-y-2 text-xs text-stone-700 leading-relaxed">
+        <p>
+            Welcome to Deenz Organics. By accessing our website, purchasing our single-origin Kashmiri organic commodities, or communicating with our team, you agree to be bound by these Terms and Conditions. Please read them carefully before placing an order.
+        </p>
+    </div>
+
+    <!-- Terms Content -->
+    <div class="space-y-8 text-xs sm:text-sm text-luxury-700 leading-relaxed">
+        
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 1. Business Identity & Single-Origin Guarantee
+            </h2>
+            <p>
+                Deenz Organics operates its primary processing plant, vacuum packaging facility, and central registered office at <strong>Wanpora, Kulgam, Jammu & Kashmir - 192231, India</strong> under the founder leadership of Dr. Deen Mohd & Raashid Din.
+            </p>
+            <p class="text-xs text-luxury-600">
+                All commodities listed on our platform (including Akhrot Giri / Kashmiri Walnut Kernels and Unpeeled Kashmiri Mountain Garlic) are 100% single-origin agricultural produce grown and harvested directly in high-altitude orchards in Kashmir (Wanpora Kulgam, Pahalgam, and Pampore). We do not import, blend, or dilute our stock with external produce.
+            </p>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 2. Natural Produce Characteristics & Variations
+            </h2>
+            <p>Because our products are 100% raw, unbleached, and preservative-free agricultural harvests:</p>
+            <ul class="list-disc pl-5 space-y-2 text-xs text-luxury-600">
+                <li>Natural variations in kernel color, oil content, garlic bulb skin shade, and shape are inherent characteristics of organic mountain farming.</li>
+                <li>Product photographs represent actual harvested produce from our Wanpora orchards; however, minor visual variance across seasonal batches is completely natural and expected.</li>
+                <li>All package weights (e.g., 250g, 300g, 400g, 500g, 1kg) are verified on certified digital scales at the time of hygienic vacuum sealing.</li>
+            </ul>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 3. Pricing, Taxes & Payment Methods
+            </h2>
+            <p>
+                All prices listed on our website are in Indian Rupees (INR) and include applicable Goods and Services Tax (GST). We reserve the right to adjust prices periodically based on seasonal crop yield fluctuations. Supported payment options include Razorpay Gateway (UPI via Google Pay, PhonePe, Paytm, BHIM, Credit/Debit Cards, Net Banking) and Cash on Delivery (COD).
+            </p>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 4. Order Dispatch & Mountain Transit Conditions
+            </h2>
+            <p>
+                Orders are dispatched from our Wanpora, Kulgam unit within 24–48 hours of order confirmation. Express courier transit generally requires 3–5 business days for major metro cities and 5–7 days for rest of India. While we utilize premium express air/surface courier partners, severe mountain highway weather advisories in Jammu & Kashmir may occasionally cause minor logistics delays beyond our direct control.
+            </p>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 5. 100% Freshness Guarantee & Refunds
+            </h2>
+            <p>
+                All purchases are backed by our 7-Day 100% Crunch & Freshness Guarantee as outlined in our Return & Refund Policy. If produce arrives soft, damaged, or defective, contact our direct helpline at <strong>+91 60060 49016</strong> or <strong>dr.deenmohd@gmail.com</strong> for a free replacement or 100% refund.
+            </p>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 6. Intellectual Property Protection
+            </h2>
+            <p>
+                The brand name 'DEENZ ORGANICS', our logo, farm photography, product descriptions, and web design are protected under Indian intellectual property laws. Unauthorized duplication or commercial misuse is strictly prohibited.
+            </p>
+        </section>
+
+        <section class="space-y-3 bg-white border border-luxury-200/70 p-6 rounded-2xl shadow-2xs">
+            <h2 class="font-display font-bold text-base text-luxury-950 border-b border-luxury-100 pb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> 7. Governing Law & Legal Jurisdiction
+            </h2>
+            <p>
+                These Terms & Conditions are governed by and construed in accordance with the laws of the Republic of India. Any disputes or claims arising out of or related to these terms shall be subject to the exclusive jurisdiction of the competent courts in <strong>Kulgam / Srinagar, Jammu & Kashmir, India</strong>.
+            </p>
+        </section>
+
+        <div class="bg-luxury-900 text-luxury-100 rounded-2xl p-6 text-center space-y-2 border border-luxury-800 shadow-sm">
+            <h4 class="font-display font-bold text-sm text-amber-300">Questions Regarding Legal Terms?</h4>
+            <p class="text-xs text-luxury-300">
+                Contact Deenz Organics Head Office: Wanpora, Kulgam, Jammu & Kashmir - 192231, India
+            </p>
+            <p class="text-xs text-luxury-200 font-mono">
+                Email: dr.deenmohd@gmail.com &bull; Direct Founders Helpline: +91 60060 49016
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>
+

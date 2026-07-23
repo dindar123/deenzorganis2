@@ -1,0 +1,8 @@
+{
+  "name": "Deenz Organics - Premium Kashmiri Organic Foods",
+  "description": "Premium e-commerce web platform for authentic Kashmiri Walnuts (Akhrot Giri) and mountain Garlic Cloves direct from Pahalgam and Pampore valleys.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
