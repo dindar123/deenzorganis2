@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof page_title !== 'undefined' ? page_title + ' | Deenz Organics' : 'Deenz Organics | Premium Kashmiri Organic Foods' %></title>
+    <meta name="description" content="<%= typeof page_description !== 'undefined' ? page_description : 'Discover 100% natural, fresh and crunchy Kashmiri Walnuts and aromatic mountain Garlic Cloves from Deenz Organics. Sourced directly from Pahalgam and Pampore valleys.' %>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Compiled Tailwind CSS & Play CDN Fallback -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        luxury: {
+                            50: '#f9f6f0',
+                            100: '#f0e8dc',
+                            200: '#e1d2be',
+                            300: '#ccb496',
+                            400: '#b4946f',
+                            500: '#9e7b54',
+                            600: '#8c6846',
+                            700: '#755439',
+                            800: '#5c412b',
+                            900: '#3d2a1b',
+                            950: '#24180f',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/includes/tailwind.css">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .thumbnail-btn img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+        }
+        .thumbnail-btn {
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        .aspect-square {
+            aspect-ratio: 1 / 1 !important;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ccb496;
+            border-radius: 3px;
+        }
+
+        ::placeholder,
+        ::-webkit-input-placeholder,
+        ::-moz-placeholder,
+        :-ms-input-placeholder {
+            color: #88827a !important;
+            opacity: 0.55 !important;
+            font-style: italic !important;
+            font-weight: 300 !important;
+            filter: blur(0.35px) !important;
+            -webkit-filter: blur(0.35px) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+        input:focus::placeholder,
+        textarea:focus::placeholder {
+            opacity: 0.25 !important;
+            filter: blur(0.75px) !important;
+            -webkit-filter: blur(0.75px) !important;
+        }
+    </style>
+</head>
+<body class="bg-luxury-50 font-sans text-luxury-950 flex flex-col min-h-screen">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-luxury-950 text-luxury-100 text-xs py-2 px-4 text-center tracking-wider font-display border-b border-luxury-900">
+        🏔️ Sourced Directly from Pahalgam and Pampore, Kashmir | Free Shipping on Orders over ₹500
+    </div>
+
+    <!-- Main Header -->
+    <header class="relative z-50 bg-white shadow-sm border-b border-luxury-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-luxury-900 rounded-full flex items-center justify-center text-luxury-200 font-display font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
+                    D+O
+                </div>
+                <div>
+                    <span class="font-display font-bold text-xl tracking-tight uppercase block text-luxury-950 group-hover:text-luxury-600 transition-colors">DEENZ ORGANICS</span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] block text-luxury-400 -mt-1">Kashmiri Mountain Gold</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-display text-sm font-medium tracking-wide">
+                <a href="/" class="text-luxury-900 hover:text-luxury-500 transition-colors">Home</a>
+                <a href="/shop" class="text-luxury-900 hover:text-luxury-500 transition-colors">Our Harvests</a>
+                <a href="/about" class="text-luxury-900 hover:text-luxury-500 transition-colors">Our Story</a>
+                <a href="/track" class="text-luxury-900 hover:text-luxury-500 transition-colors flex items-center gap-1">
+                    <i data-lucide="package" class="w-4 h-4"></i> Track Order
+                </a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-4">
+
+                <!-- Cart Icon with badge -->
+                <a href="/cart" class="relative p-2 text-luxury-900 hover:text-luxury-500 hover:scale-105 transition-all">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <% if (cartCount > 0) { %>
+                        <span class="absolute -top-1 -right-1 bg-luxury-600 text-white font-mono text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold animate-pulse">
+                             <%= cartCount %>
+                        </span>
+                    <% } %>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-luxury-900 hover:text-luxury-600 focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-drawer" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300">
+            <div class="fixed top-0 bottom-0 right-0 w-80 max-w-[85vw] bg-white shadow-xl flex flex-col p-6 transition-transform duration-300 translate-x-full" id="mobile-drawer-content">
+                <div class="flex items-center justify-between border-b border-luxury-100 pb-4 mb-6">
+                    <div class="font-display font-bold text-lg text-luxury-950">NAVIGATION</div>
+                    <button id="mobile-drawer-close" class="p-2 text-luxury-400 hover:text-luxury-800">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                
+                <nav class="flex flex-col gap-5 font-display text-base font-medium">
+                    <a href="/" class="py-2 text-luxury-900 hover:text-luxury-500 border-b border-luxury-50 transition-colors">Home</a>
+                    <a href="/shop" class="py-2 text-luxury-900 hover:text-luxury-500 border-b border-luxury-50 transition-colors">Our Harvests</a>
+                    <a href="/about" class="py-2 text-luxury-900 hover:text-luxury-500 border-b border-luxury-50 transition-colors">Our Story</a>
+                    <a href="/track" class="py-2 text-luxury-900 hover:text-luxury-500 border-b border-luxury-50 transition-colors flex items-center gap-2">
+                        <i data-lucide="package" class="w-5 h-5 text-luxury-400"></i> Track Your Order
+                    </a>
+                </nav>
+
+                <div class="mt-auto border-t border-luxury-100 pt-6 text-xs text-luxury-500 space-y-2">
+                    <p class="flex items-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4"></i> dr.deenmohd@gmail.com
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i> Pahalgam & Pampore, J&K, India
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">

@@ -1,0 +1,155 @@
+<%- include('partials/header') %>
+
+<% 
+    const currentOrder = (typeof order !== 'undefined' && order) ? order : {};
+    const orderItems = Array.isArray(currentOrder.items) ? currentOrder.items : [];
+    
+    let calcSubtotal = 0;
+    orderItems.forEach(item => {
+        calcSubtotal += (item.price || 0) * (item.quantity || 1);
+    });
+    
+    const subtotal = typeof currentOrder.subtotal === 'number' ? currentOrder.subtotal : calcSubtotal;
+    const discount = typeof currentOrder.discount === 'number' ? currentOrder.discount : 0;
+    const shipping = typeof currentOrder.shipping === 'number' ? currentOrder.shipping : (subtotal > 1000 || subtotal === 0 ? 0 : 90);
+    const tax = typeof currentOrder.tax === 'number' ? currentOrder.tax : Math.max(0, subtotal - discount) * 0.05;
+    const total = typeof currentOrder.total === 'number' ? currentOrder.total : (currentOrder.total_amount || Math.max(0, subtotal - discount + shipping + tax));
+%>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    
+    <!-- Congratulations Notice -->
+    <div class="text-center space-y-4 mb-12">
+        <div class="w-16 h-16 bg-emerald-100 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto animate-bounce">
+            ✓
+        </div>
+        <h1 class="font-display font-bold text-3xl text-luxury-950">Payment Received & Confirmed</h1>
+        <p class="text-xs text-luxury-500 max-w-sm mx-auto leading-relaxed">
+            Thank you for purchasing from Deenz Organics! Your order has been registered securely and is scheduled for air cargo sorting.
+        </p>
+    </div>
+
+    <!-- Printable Invoice Card -->
+    <div class="bg-white border border-luxury-200 rounded-2xl p-8 shadow-sm space-y-8" id="printable-invoice">
+        
+        <!-- Invoice Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-luxury-100 pb-6">
+            <div class="space-y-1">
+                <span class="font-display font-bold text-lg text-luxury-950 uppercase tracking-wide">DEENZ ORGANICS</span>
+                <p class="text-[10px] font-mono text-luxury-400">Pahalgam & Pampore, J&K, India</p>
+                <p class="text-[10px] font-mono text-luxury-400">Helpline: +91 60060 49016 / +91 60050 92150</p>
+            </div>
+            <div class="text-left sm:text-right">
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold px-2.5 py-1 rounded uppercase tracking-wider">
+                    Official Tax Invoice
+                </span>
+                <p class="text-xs text-luxury-950 font-bold mt-2 font-mono">Invoice #: <%= currentOrder.order_number || 'ORD-1001' %></p>
+                <p class="text-[11px] text-luxury-400 font-mono">Date: <%= new Date().toLocaleDateString() %></p>
+            </div>
+        </div>
+
+        <!-- Address Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs leading-relaxed">
+            <div class="space-y-1">
+                <h4 class="font-bold text-luxury-500 uppercase tracking-widest text-[10px] font-display">Billed & Shipped To</h4>
+                <p class="font-bold text-luxury-950 text-sm"><%= currentOrder.customer_name || 'Valued Customer' %></p>
+                <p class="text-luxury-600"><%= currentOrder.shipping_address || 'Pahalgam, Jammu & Kashmir' %></p>
+                <p class="text-luxury-600">Phone: <%= currentOrder.customer_phone || '+91 60060 49016' %></p>
+                <p class="text-luxury-400 font-mono">Email: <%= currentOrder.customer_email || 'customer@example.com' %></p>
+            </div>
+            <div class="space-y-1 sm:text-right">
+                <h4 class="font-bold text-luxury-500 uppercase tracking-widest text-[10px] font-display sm:text-right">Payment Status</h4>
+                <p class="text-luxury-600">Payment Gateway: <strong class="text-luxury-950 uppercase"><%= currentOrder.payment_method || 'Online Payment / COD' %></strong></p>
+                <p class="text-luxury-600">Payment Status: <strong class="text-emerald-600 font-bold uppercase"><%= currentOrder.payment_status || 'PAID & COMPLETED' %></strong></p>
+                <p class="text-luxury-600">Fulfillment: <strong class="text-amber-600 font-bold uppercase"><%= currentOrder.order_status || 'PREPARING DISPATCH' %></strong></p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="border border-luxury-100 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-xs text-luxury-700">
+                <thead>
+                    <tr class="bg-luxury-100/50 border-b border-luxury-200 font-display font-semibold text-luxury-900">
+                        <th class="p-4">Harvest Commodity Item</th>
+                        <th class="p-4 text-center">Unit Price</th>
+                        <th class="p-4 text-center">Qty</th>
+                        <th class="p-4 text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-luxury-50">
+                    <% orderItems.forEach(item => { %>
+                        <% const itemPrice = item.price || 0; %>
+                        <% const itemQty = item.quantity || 1; %>
+                        <tr>
+                            <td class="p-4">
+                                <div class="font-bold text-luxury-950"><%= item.name || item.product_name || 'Kashmiri Organic Product' %></div>
+                                <span class="text-[10px] font-mono text-luxury-400">SKU: <%= item.sku || 'KMG-500' %> | Variant: <%= item.weight || item.weight_variant || '500g' %></span>
+                            </td>
+                            <td class="p-4 text-center font-mono">₹<%= itemPrice.toFixed(2) %></td>
+                            <td class="p-4 text-center font-mono font-bold"><%= itemQty %></td>
+                            <td class="p-4 text-right font-mono font-bold text-luxury-950">₹<%= (itemPrice * itemQty).toFixed(2) %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Financial Ledger -->
+        <div class="flex justify-end pt-4">
+            <div class="w-full sm:w-80 space-y-3 text-xs text-luxury-600 border-t border-luxury-100 pt-4">
+                <div class="flex justify-between">
+                    <span>Subtotal Items</span>
+                    <span class="font-mono font-bold text-luxury-950">₹<%= subtotal.toFixed(2) %></span>
+                </div>
+                
+                <% if (discount > 0) { %>
+                    <div class="flex justify-between text-red-600">
+                        <span>Coupon Deduction</span>
+                        <span class="font-mono font-bold">-₹<%= discount.toFixed(2) %></span>
+                    </div>
+                <% } %>
+
+                <div class="flex justify-between">
+                    <span>Air Cargo Carriage</span>
+                    <span class="font-mono font-bold text-luxury-950">
+                        <%= shipping === 0 ? 'FREE' : '₹' + shipping.toFixed(2) %>
+                    </span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span>Estimated 5% GST</span>
+                    <span class="font-mono font-bold text-luxury-950">₹<%= tax.toFixed(2) %></span>
+                </div>
+
+                <div class="border-t border-luxury-200 pt-3 flex justify-between text-sm font-display font-bold text-luxury-950">
+                    <span>Total Paid</span>
+                    <span class="font-mono text-base text-luxury-900">₹<%= total.toFixed(2) %></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer terms -->
+        <div class="text-center text-[10px] text-luxury-400 border-t border-luxury-100 pt-6">
+            <span>Thank you for supporting sustainable farmers in Pahalgam & Pampore, Kashmir. This is a computer-generated tax invoice dually verified under Indian organic standards.</span>
+        </div>
+    </div>
+
+    <!-- Actions bar -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mt-8">
+        <a href="/" class="font-display font-bold text-xs text-luxury-900 hover:text-luxury-600 flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Return to Store Homepage
+        </a>
+        
+        <div class="flex gap-4">
+            <a href="/track?order_number=<%= encodeURIComponent(currentOrder.order_number || 'ORD-1001') %>" class="border border-luxury-300 hover:border-luxury-500 font-display text-xs font-semibold px-4 py-2.5 rounded-md text-luxury-700 hover:text-luxury-950 flex items-center gap-1.5 transition-all">
+                <i data-lucide="truck" class="w-4 h-4"></i> Track Dispatch Delivery
+            </a>
+
+            <button onclick="window.print();" class="bg-luxury-950 hover:bg-luxury-800 font-display text-xs font-semibold px-5 py-2.5 rounded-md text-white flex items-center gap-1.5 shadow transition-all hover:scale-[1.01] cursor-pointer">
+                <i data-lucide="printer" class="w-4 h-4"></i> Print Invoice PDF
+            </button>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

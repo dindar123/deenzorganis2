@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deenz Organics - Admin Suite Control Panel</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+<% if (!isAuthenticated) { %>
+    <!-- Admin Login Gateway Page -->
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white border border-slate-200 p-8 rounded-2xl shadow-xl space-y-6">
+            <div class="text-center space-y-2">
+                <span class="text-4xl select-none">🔑</span>
+                <h1 class="font-display font-bold text-2xl text-slate-900">Deenz Organics Admin Suite</h1>
+                <p class="text-xs text-slate-400">Restricted secure administrative portal entry</p>
+            </div>
+
+            <% if (message) { %>
+                <div class="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg font-medium">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <form action="/admin" method="POST" class="space-y-4 text-xs">
+                <input type="hidden" name="login" value="1">
+                <div class="space-y-1.5">
+                    <label class="font-semibold text-slate-500 uppercase tracking-wider block">Username</label>
+                    <input type="text" name="username" required placeholder="admin" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 focus:outline-none focus:ring-1 focus:ring-slate-400 text-slate-900 font-mono">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="font-semibold text-slate-500 uppercase tracking-wider block">Password</label>
+                    <input type="password" name="password" required placeholder="admin123" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 focus:outline-none focus:ring-1 focus:ring-slate-400 text-slate-900 font-mono">
+                </div>
+
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-display font-semibold py-3.5 rounded-lg shadow transition-all hover:scale-[1.01] cursor-pointer">
+                    Verify Credentials
+                </button>
+            </form>
+            
+            <div class="text-center text-[10px] text-slate-400 border-t border-slate-100 pt-4">
+                <span>Default Credentials: <strong class="font-mono text-slate-600">admin</strong> / <strong class="font-mono text-slate-600">admin123</strong></span>
+            </div>
+        </div>
+    </div>
+<% } else { %>
+    <!-- Logged-in Admin Panel Suite -->
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0">
+            <div class="p-6 space-y-8">
+                <div>
+                    <h2 class="font-display font-bold text-lg text-white tracking-wide">DEENZ ORGANICS</h2>
+                    <p class="text-[9px] text-slate-500 font-mono">Admin Portal v1.0.4</p>
+                </div>
+
+                <nav class="space-y-1.5 text-xs font-medium">
+                    <a href="#dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-800 text-white transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i> Dashboard Control
+                    </a>
+                    <a href="#catalog" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="package" class="w-4.5 h-4.5"></i> Catalog Items
+                    </a>
+                    <a href="#orders" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="shopping-cart" class="w-4.5 h-4.5"></i> Customer Orders
+                    </a>
+                    <a href="#reviews" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="star" class="w-4.5 h-4.5"></i> Customer Reviews
+                    </a>
+                    <a href="#messages" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-4.5 h-4.5"></i> Buyer Inquiries
+                    </a>
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i data-lucide="external-link" class="w-4.5 h-4.5"></i> View Live Store
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Footer user info -->
+            <div class="p-6 border-t border-slate-800 flex items-center justify-between text-xs">
+                <div>
+                    <p class="font-bold text-white">Administrator</p>
+                    <p class="text-[10px] text-slate-500 font-mono">ID: deenz_owner</p>
+                </div>
+                <a href="/admin?logout=1" class="text-red-400 hover:text-red-300" title="Secure Logout">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Panel -->
+        <main class="flex-grow p-6 md:p-10 space-y-10 overflow-y-auto">
+            
+            <% if (message) { %>
+                <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
+                    <span><%= message %></span>
+                </div>
+            <% } %>
+
+            <!-- Segment 1: Dashboard Home -->
+            <section id="dashboard" class="space-y-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="font-display font-bold text-2xl text-slate-900">Control Dashboard Hub</h2>
+                        <p class="text-xs text-slate-400">Real-time harvest metrics, financial totals, and visitor logs</p>
+                    </div>
+                    <span class="text-xs text-slate-500 bg-white px-3 py-1.5 border border-slate-200 rounded-lg font-mono">
+                        System Online
+                    </span>
+                </div>
+
+                <!-- KPI metric tiles -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white border border-slate-200 p-6 rounded-xl space-y-1.5">
+                        <div class="flex justify-between text-slate-400">
+                            <span class="text-[10px] uppercase font-bold tracking-wider">Estimated Revenue</span>
+                            <i data-lucide="indian-rupee" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-slate-900">₹<%= totalRevenue.toFixed(2) %></p>
+                        <p class="text-[10px] text-emerald-600 flex items-center gap-1">
+                            <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Live in-memory database
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 p-6 rounded-xl space-y-1.5">
+                        <div class="flex justify-between text-slate-400">
+                            <span class="text-[10px] uppercase font-bold tracking-wider">Total Dispatches</span>
+                            <i data-lucide="truck" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-slate-900"><%= totalOrders %></p>
+                        <p class="text-[10px] text-slate-400">Scheduled express air-cargo</p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 p-6 rounded-xl space-y-1.5">
+                        <div class="flex justify-between text-slate-400">
+                            <span class="text-[10px] uppercase font-bold tracking-wider">Conversion Ratio</span>
+                            <i data-lucide="trending-up" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-slate-900">4.8%</p>
+                        <p class="text-[10px] text-slate-400">PCI checkout optimized</p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 p-6 rounded-xl space-y-1.5">
+                        <div class="flex justify-between text-slate-400">
+                            <span class="text-[10px] uppercase font-bold tracking-wider">Raw Traffic Visitors</span>
+                            <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-slate-900">3,120</p>
+                        <p class="text-[10px] text-emerald-600 flex items-center gap-1">
+                            <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Active sessions tracking
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Custom Visual Chart drawn with premium SVG lines -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6">
+                    <h3 class="font-display font-bold text-sm text-slate-900 uppercase tracking-wider mb-4">Traffic and Conversion Performance Summary</h3>
+                    <div class="h-48 w-full bg-slate-50 rounded-xl relative flex items-end p-4 border border-slate-100">
+                        <svg class="absolute inset-0 w-full h-full p-4 text-slate-200" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <polyline fill="none" stroke="#0f172a" stroke-width="2" points="0,80 20,60 40,75 60,30 80,45 100,10" />
+                        </svg>
+                        <div class="absolute bottom-2 left-4 text-[10px] text-slate-400 font-mono">Yesterday</div>
+                        <div class="absolute bottom-2 right-4 text-[10px] text-slate-400 font-mono">Today</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Segment 2: Add/Edit Product Form & List -->
+            <section id="catalog" class="space-y-6 pt-10 border-t border-slate-200">
+                <div>
+                    <h2 class="font-display font-bold text-xl text-slate-900">Organic Catalog Products</h2>
+                    <p class="text-xs text-slate-400">Add dynamic harvests, calibrate stock units, or modify existing details</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Form Create/Edit Product -->
+                    <div class="lg:col-span-5 bg-white border border-slate-200 p-6 rounded-2xl space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-display font-bold text-xs text-slate-900 uppercase tracking-wider">
+                                <%= editProduct ? 'Modify Commodity' : 'Add New Commodity' %>
+                            </h3>
+                            <% if (editProduct) { %>
+                                <a href="/admin#catalog" class="text-xs text-blue-600 hover:underline">Add New Instead</a>
+                            <% } %>
+                        </div>
+                        
+                        <form action="/admin" method="POST" class="space-y-4 text-xs">
+                            <% if (editProduct) { %>
+                                <input type="hidden" name="edit_product" value="1">
+                                <input type="hidden" name="prod_id" value="<%= editProduct.id %>">
+                            <% } else { %>
+                                <input type="hidden" name="add_product" value="1">
+                            <% } %>
+                            
+                            <div class="space-y-1.5">
+                                <label class="font-semibold text-slate-500">Commodity Title *</label>
+                                <input type="text" name="prod_name" required value="<%= editProduct ? editProduct.name : '' %>" placeholder="Kashmiri Walnuts / Akhrot Giri" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-slate-400">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="font-semibold text-slate-500">Retail Price (₹) *</label>
+                                    <input type="number" step="0.01" name="prod_price" required value="<%= editProduct ? editProduct.price : '' %>" placeholder="750.00" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-slate-400 font-mono">
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="font-semibold text-slate-500">In Stock Qty *</label>
+                                    <input type="number" name="prod_stock" required value="<%= editProduct ? editProduct.stock : '100' %>" placeholder="100" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-slate-400 font-mono">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-display font-semibold py-3 rounded-lg shadow-md transition-all cursor-pointer">
+                                <%= editProduct ? 'Save Modifications' : 'Publish Product to Catalog' %>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 border-b border-slate-200 font-display font-bold text-slate-700">
+                                <tr>
+                                    <th class="p-4">Commodity Item</th>
+                                    <th class="p-4 text-center">Price</th>
+                                    <th class="p-4 text-center">Stock</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <% productsList.forEach(p => { %>
+                                    <tr>
+                                        <td class="p-4">
+                                            <div class="font-bold text-slate-900"><%= p.name %></div>
+                                            <span class="text-[10px] font-mono text-slate-400">SKU: <%= p.sku %></span>
+                                        </td>
+                                        <td class="p-4 text-center font-mono font-bold">₹<%= p.price.toFixed(2) %></td>
+                                        <td class="p-4 text-center">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold <%= p.stock > 10 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800' %>">
+                                                <%= p.stock %> Units
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right space-x-2">
+                                            <a href="/admin?edit_id=<%= p.id %>#catalog" class="text-blue-600 hover:underline font-semibold">Edit</a>
+                                            <a href="/admin?delete_id=<%= p.id %>" onclick="return confirm('Delete this product?');" class="text-red-600 hover:underline font-semibold">Delete</a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Segment 3: Customer Orders -->
+            <section id="orders" class="space-y-6 pt-10 border-t border-slate-200">
+                <div>
+                    <h2 class="font-display font-bold text-xl text-slate-900">Registered Customer Orders</h2>
+                    <p class="text-xs text-slate-400">Manage order details, payment verification, and air-cargo logistics</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-slate-200 font-display font-bold text-slate-700">
+                            <tr>
+                                <th class="p-4">Invoice Ref</th>
+                                <th class="p-4">Recipient Name</th>
+                                <th class="p-4">Item Details</th>
+                                <th class="p-4 text-center">Amount</th>
+                                <th class="p-4 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <% ordersList.forEach(ord => { %>
+                                <tr>
+                                    <td class="p-4 font-mono font-bold text-slate-900"><%= ord.order_number %></td>
+                                    <td class="p-4">
+                                        <div class="font-bold text-slate-900"><%= ord.customer_name %></div>
+                                        <div class="text-[10px] text-slate-400"><%= ord.customer_email %></div>
+                                    </td>
+                                    <td class="p-4 text-slate-600 max-w-xs truncate">
+                                        <%= ord.items_summary || 'Organic Harvest Package' %>
+                                    </td>
+                                    <td class="p-4 text-center font-mono font-bold text-slate-900">₹<%= ord.total.toFixed(2) %></td>
+                                    <td class="p-4 text-center">
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase font-bold bg-emerald-100 text-emerald-800">
+                                            <%= ord.status %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Segment 4: Reviews -->
+            <section id="reviews" class="space-y-6 pt-10 border-t border-slate-200">
+                <div>
+                    <h2 class="font-display font-bold text-xl text-slate-900">Customer Testimonial Reviews</h2>
+                    <p class="text-xs text-slate-400">Moderate product ratings and customer feedback</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-slate-200 font-display font-bold text-slate-700">
+                            <tr>
+                                <th class="p-4">Author</th>
+                                <th class="p-4">Rating & Review</th>
+                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4 text-right">Moderation Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <% reviewsList.forEach(r => { %>
+                                <tr>
+                                    <td class="p-4">
+                                        <div class="font-bold text-slate-900"><%= r.author %></div>
+                                        <div class="text-[10px] text-slate-400"><%= r.product_name || 'Harvest Product' %></div>
+                                    </td>
+                                    <td class="p-4 space-y-1">
+                                        <div class="text-amber-500">
+                                            <% for(let i=0; i<r.rating; i++) { %>★<% } %>
+                                        </div>
+                                        <p class="text-slate-600 max-w-md"><%= r.comment %></p>
+                                    </td>
+                                    <td class="p-4 text-center">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase <%= r.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' %>">
+                                            <%= r.status %>
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right space-x-2">
+                                        <% if (r.status !== 'approved') { %>
+                                            <a href="/admin?approve_review_id=<%= r.id %>" class="text-emerald-600 hover:underline font-semibold">Approve</a>
+                                        <% } else { %>
+                                            <a href="/admin?reject_review_id=<%= r.id %>" class="text-amber-600 hover:underline font-semibold">Reject</a>
+                                        <% } %>
+                                        <a href="/admin?delete_review_id=<%= r.id %>" onclick="return confirm('Delete review?');" class="text-red-600 hover:underline font-semibold">Delete</a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Segment 5: Messages -->
+            <section id="messages" class="space-y-6 pt-10 border-t border-slate-200">
+                <div>
+                    <h2 class="font-display font-bold text-xl text-slate-900">Buyer Inquiry Messages</h2>
+                    <p class="text-xs text-slate-400">Inquiries sent via the contact form</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-slate-200 font-display font-bold text-slate-700">
+                            <tr>
+                                <th class="p-4">Sender Name</th>
+                                <th class="p-4">Email Address</th>
+                                <th class="p-4">Subject</th>
+                                <th class="p-4 text-right">Received Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <% messagesList.forEach(m => { %>
+                                <tr>
+                                    <td class="p-4 font-bold text-slate-900"><%= m.name %></td>
+                                    <td class="p-4 font-mono text-slate-600"><%= m.email %></td>
+                                    <td class="p-4 text-slate-700"><%= m.subject %></td>
+                                    <td class="p-4 text-right font-mono text-slate-400"><%= m.created_at %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+<% } %>
+
+<script>
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+</script>
+</body>
+</html>

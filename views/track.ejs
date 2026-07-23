@@ -1,0 +1,126 @@
+<%- include('partials/header') %>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center space-y-3 mb-12">
+        <p class="text-xs uppercase tracking-[0.2em] text-luxury-500 font-display font-bold">Consignment Locator</p>
+        <h1 class="font-display font-bold text-3xl text-luxury-950">Track Your Organic Cargo</h1>
+        <div class="w-12 h-[2px] bg-luxury-400 mx-auto"></div>
+    </div>
+
+    <!-- Search input widget -->
+    <div class="bg-white border border-luxury-200/60 rounded-2xl p-8 shadow-sm max-w-xl mx-auto mb-12">
+        <form action="/track" method="GET" class="space-y-4">
+            <div class="space-y-2">
+                <label class="text-xs text-luxury-500 font-semibold uppercase tracking-wider block">Enter Order Number or Invoice Code</label>
+                <div class="flex gap-2">
+                    <input type="text" name="order_number" value="<%= searchedNumber %>" required placeholder="e.g. DO-20260720-4821" class="flex-grow bg-luxury-50 border border-luxury-200 focus:border-luxury-500 rounded-md py-3 px-4 text-xs font-mono uppercase text-luxury-950 focus:outline-none">
+                    <button type="submit" class="bg-luxury-950 hover:bg-luxury-900 text-white font-display text-xs font-semibold px-6 py-3 rounded-md transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer">
+                        <i data-lucide="search" class="w-4 h-4"></i> Locate Cargo
+                    </button>
+                </div>
+            </div>
+            <p class="text-[10px] text-luxury-400">
+                💡 Check your email confirmation or printable receipt docket for the <code>DO-YYYYMMDD-XXXX</code> invoice format.
+            </p>
+        </form>
+    </div>
+
+    <!-- Output result -->
+    <% if (searchedNumber) { %>
+        <% if (!orderFound) { %>
+            <!-- Not found -->
+            <div class="bg-white border border-red-100 rounded-xl p-12 text-center max-w-xl mx-auto space-y-4">
+                <span class="text-5xl select-none">🔍</span>
+                <h3 class="font-display font-bold text-lg text-luxury-950">No Consignment Registered</h3>
+                <p class="text-xs text-luxury-500">
+                    We couldn't identify any active organic dispatches matching <strong class="font-mono text-luxury-900"><%= searchedNumber %></strong>. Please verify typo inputs.
+                </p>
+            </div>
+        <% } else { %>
+            <!-- Found tracking visualization -->
+            <div class="bg-white border border-luxury-200 rounded-2xl p-8 shadow-sm space-y-12">
+                
+                <!-- Summary bar -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 border-b border-luxury-100 pb-6 text-xs text-luxury-600">
+                    <div>
+                        <span class="text-[9px] uppercase tracking-wider text-luxury-400 block font-display">Tracking Reference</span>
+                        <strong class="text-luxury-950 font-mono text-sm"><%= orderFound.order_number %></strong>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase tracking-wider text-luxury-400 block font-display">Recipient Name</span>
+                        <strong class="text-luxury-950 text-sm"><%= orderFound.customer_name %></strong>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase tracking-wider text-luxury-400 block font-display">Current Hub Location</span>
+                        <strong class="text-emerald-600 text-sm uppercase">
+                            <% 
+                                if (currentStepIndex === 1) { %>Paid & Documented<% }
+                                else if (currentStepIndex === 2) { %>Wanpora Sorting Warehouse<% }
+                                else if (currentStepIndex === 3) { %>Srinagar Air Cargo Hub<% }
+                                else if (currentStepIndex === 4) { %>Delivered Securely<% }
+                                else { %>In Registry Queue<% }
+                            %>
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Timeline Visualizer -->
+                <div class="relative py-12 px-4 sm:px-12">
+                    <div class="absolute top-[52px] inset-x-8 sm:inset-x-20 h-1 bg-luxury-100 -z-10"></div>
+                    <div class="absolute top-[52px] left-8 sm:left-20 h-1 bg-luxury-600 -z-10 transition-all duration-1000" style="width: <%= (currentStepIndex / 4) * 75 %>%;"></div>
+
+                    <div class="flex items-center justify-between text-center gap-2">
+                        <div class="space-y-3 flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs shadow-sm <%= currentStepIndex >= 0 ? 'bg-luxury-950 border-luxury-950 text-white' : 'bg-white border-luxury-200 text-luxury-400' %>">1</div>
+                            <span class="text-[10px] font-bold text-luxury-950 block">Pending</span>
+                        </div>
+                        <div class="space-y-3 flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs shadow-sm <%= currentStepIndex >= 1 ? 'bg-luxury-950 border-luxury-950 text-white' : 'bg-white border-luxury-200 text-luxury-400' %>">2</div>
+                            <span class="text-[10px] font-bold <%= currentStepIndex >= 1 ? 'text-luxury-950' : 'text-luxury-400' %> block">Paid</span>
+                        </div>
+                        <div class="space-y-3 flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs shadow-sm <%= currentStepIndex >= 2 ? 'bg-luxury-950 border-luxury-950 text-white' : 'bg-white border-luxury-200 text-luxury-400' %>">3</div>
+                            <span class="text-[10px] font-bold <%= currentStepIndex >= 2 ? 'text-luxury-950' : 'text-luxury-400' %> block">Processing</span>
+                        </div>
+                        <div class="space-y-3 flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs shadow-sm <%= currentStepIndex >= 3 ? 'bg-luxury-950 border-luxury-950 text-white' : 'bg-white border-luxury-200 text-luxury-400' %>">4</div>
+                            <span class="text-[10px] font-bold <%= currentStepIndex >= 3 ? 'text-luxury-950' : 'text-luxury-400' %> block">Shipped</span>
+                        </div>
+                        <div class="space-y-3 flex flex-col items-center">
+                            <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs shadow-sm <%= currentStepIndex >= 4 ? 'bg-luxury-950 border-luxury-950 text-white' : 'bg-white border-luxury-200 text-luxury-400' %>">5</div>
+                            <span class="text-[10px] font-bold <%= currentStepIndex >= 4 ? 'text-luxury-950' : 'text-luxury-400' %> block">Delivered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed logs block -->
+                <div class="border-t border-luxury-100 pt-8 space-y-4 text-xs">
+                    <h4 class="font-display font-bold text-sm text-luxury-950 uppercase tracking-wider">Consignment Logistics Logs</h4>
+                    
+                    <div class="space-y-4 pl-4 border-l border-luxury-200">
+                        <% if (currentStepIndex >= 2) { %>
+                            <div class="relative">
+                                <div class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-luxury-950 border-2 border-white"></div>
+                                <p class="font-bold text-luxury-950">Sorting & Moisture Grading Complete</p>
+                                <p class="text-[10px] text-luxury-400 font-mono">Sorting Center, Wanpora, Kulgam, J&K</p>
+                                <p class="text-luxury-600 mt-1">Walnut shells calibrated, triple sorted, and vacuumed with freshness descriptors.</p>
+                            </div>
+                        <% } %>
+
+                        <% if (currentStepIndex >= 1) { %>
+                            <div class="relative">
+                                <div class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-luxury-950 border-2 border-white"></div>
+                                <p class="font-bold text-luxury-950">Invoice Issued & Payment Verified</p>
+                                <p class="text-[10px] text-luxury-400 font-mono">Secure Gateway Node</p>
+                                <p class="text-luxury-600 mt-1">Transaction funds credited securely and cleared under local J&K tax codes.</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+            </div>
+        <% } %>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

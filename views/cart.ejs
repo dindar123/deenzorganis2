@@ -1,0 +1,164 @@
+<%- include('partials/header') %>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="font-display font-bold text-3xl text-luxury-950 mb-8 flex items-center gap-2">
+        <i data-lucide="shopping-bag" class="w-8 h-8 text-luxury-500"></i> Your Harvest Cart Summary
+    </h1>
+
+    <!-- Alert Notices -->
+    <% if (typeof message !== 'undefined' && message) { %>
+        <% const msgType = typeof messageType !== 'undefined' ? messageType : 'info'; %>
+        <div class="p-4 rounded-xl mb-8 border flex items-center gap-3 text-xs font-display <%= msgType === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : (msgType === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-luxury-100 border-luxury-300 text-luxury-800') %>">
+            <i data-lucide="<%= msgType === 'error' ? 'alert-circle' : 'check-circle' %>" class="w-5 h-5 shrink-0"></i>
+            <span><%= message %></span>
+        </div>
+    <% } %>
+
+    <% const itemsList = typeof cartItems !== 'undefined' ? cartItems : []; %>
+    <% if (itemsList.length === 0) { %>
+        <!-- Empty Cart View -->
+        <div class="bg-white border border-luxury-100 rounded-2xl p-16 text-center space-y-6">
+            <span class="text-7xl select-none">🌾</span>
+            <h2 class="font-display font-bold text-xl text-luxury-950">Your Cart is Currently Empty</h2>
+            <p class="text-xs text-luxury-500 max-w-sm mx-auto leading-relaxed">
+                You haven't added any premium organic Kashmiri harvests yet. Go browse our walnut kernels and mountain garlic selections to start!
+            </p>
+            <a href="/shop" class="bg-luxury-900 hover:bg-luxury-800 text-white font-display font-semibold text-xs py-3 px-8 rounded-md tracking-wider uppercase inline-block shadow-md">
+                Browse All Harvests
+            </a>
+        </div>
+    <% } else { %>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- Items Area Left (lg:col-span-8) -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="bg-white border border-luxury-200/60 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="divide-y divide-luxury-100">
+                        <% itemsList.forEach(item => { %>
+                            <div class="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                                <!-- Info block -->
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 bg-stone-50 border border-stone-200 rounded-xl flex items-center justify-center overflow-hidden p-1 shrink-0">
+                                        <img src="<%= item.main_image || '/assets/images/kashmiri_walnuts_main.webp' %>" class="max-h-full max-w-full object-contain rounded" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-display font-bold text-sm text-luxury-950 hover:text-luxury-600 transition-colors">
+                                            <a href="/product/<%= item.slug %>"><%= item.name %></a>
+                                        </h3>
+                                        <p class="text-[10px] font-mono text-luxury-400 uppercase mt-0.5">SKU: <%= item.sku %> | Pack: <%= item.weight %></p>
+                                        <p class="text-xs text-luxury-950 font-bold mt-1">₹<%= item.price.toFixed(2) %></p>
+                                    </div>
+                                </div>
+
+                                <!-- Quantity and subtotal controls -->
+                                <div class="flex items-center justify-between sm:justify-end gap-8 w-full sm:w-auto border-t sm:border-t-0 pt-4 sm:pt-0">
+                                    <!-- Form to update quantity -->
+                                    <form action="/cart" method="POST" class="flex items-center border border-luxury-200 rounded bg-white">
+                                        <input type="hidden" name="action" value="update">
+                                        <input type="hidden" name="product_id" value="<%= item.id %>">
+                                        
+                                        <button type="submit" onclick="const q=this.form.quantity; if(parseInt(q.value) > 1) q.value = parseInt(q.value)-1;" class="px-2.5 py-1.5 text-luxury-400 hover:text-luxury-900 font-bold text-xs">-</button>
+                                        <input type="text" name="quantity" value="<%= item.quantity %>" readonly class="w-8 text-center text-[11px] font-bold border-none text-luxury-950 focus:outline-none">
+                                        <button type="submit" onclick="const q=this.form.quantity; if(parseInt(q.value) < 10) q.value = parseInt(q.value)+1;" class="px-2.5 py-1.5 text-luxury-400 hover:text-luxury-900 font-bold text-xs">+</button>
+                                    </form>
+
+                                    <!-- Price total -->
+                                    <div class="text-right">
+                                        <span class="text-xs text-luxury-400 block uppercase tracking-wider text-[9px] font-mono">Row Total</span>
+                                        <span class="text-sm font-bold text-luxury-950">₹<%= (item.price * item.quantity).toFixed(2) %></span>
+                                    </div>
+
+                                    <!-- Remove -->
+                                    <a href="/cart?action=remove&id=<%= item.id %>" class="text-red-400 hover:text-red-700 p-2 transition-colors" title="Remove Item">
+                                        <i data-lucide="trash-2" class="w-4.5 h-4.5"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <!-- Continue shopping trigger -->
+                <div class="flex justify-between items-center text-xs">
+                    <a href="/shop" class="font-display font-bold text-luxury-900 flex items-center gap-1.5 hover:underline">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Continue Loading Commodities
+                    </a>
+                </div>
+            </div>
+
+            <!-- Summary Area Right (lg:col-span-4) -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Promo Code Box -->
+                <div class="bg-white border border-luxury-200/60 rounded-2xl p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display font-bold text-sm text-luxury-950 uppercase tracking-wider">Apply Promo Coupon</h3>
+                    <form action="/cart" method="POST" class="flex gap-2">
+                        <input type="text" name="coupon_code" placeholder="Enter code (KASHMIR10)" class="flex-grow bg-luxury-50 border border-luxury-200 rounded-md py-2 px-3 text-xs font-mono uppercase text-luxury-950 focus:outline-none">
+                        <button type="submit" name="apply_coupon" value="1" class="bg-luxury-900 hover:bg-luxury-800 text-white font-display text-xs font-semibold px-4 py-2.5 rounded-md transition-colors">
+                            Apply
+                        </button>
+                    </form>
+                    
+                    <% if (typeof couponCodeApplied !== 'undefined' && couponCodeApplied) { %>
+                        <div class="bg-luxury-50 border border-luxury-200 rounded-lg p-3 flex items-center justify-between text-[11px]">
+                            <div class="flex items-center gap-2 text-luxury-700">
+                                <i data-lucide="tag" class="w-4 h-4 text-luxury-500 animate-bounce"></i>
+                                <span>Code <strong class="font-mono text-luxury-950"><%= couponCodeApplied %></strong> active!</span>
+                            </div>
+                            <a href="/cart?clear_coupon=1" class="text-red-500 hover:text-red-700">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    <% } else { %>
+                        <p class="text-[10px] text-luxury-400 leading-relaxed leading-none">
+                            💡 Use <strong class="font-mono text-luxury-700 select-all">KASHMIR10</strong> for 10% off or <strong class="font-mono text-luxury-700 select-all">ORGANIC50</strong> for a flat ₹50.00 instant deduction!
+                        </p>
+                    <% } %>
+                </div>
+
+                <!-- Ledger Summary -->
+                <div class="bg-white border border-luxury-200/60 rounded-2xl p-6 space-y-4 shadow-sm">
+                    <h3 class="font-display font-bold text-sm text-luxury-950 uppercase tracking-wider pb-3 border-b border-luxury-100">Order Totals</h3>
+                    
+                    <div class="space-y-3 text-xs text-luxury-600">
+                        <div class="flex items-center justify-between">
+                            <span>Subtotal Items</span>
+                            <span class="font-mono font-bold text-luxury-950">₹<%= (typeof subtotal !== 'undefined' ? subtotal : 0).toFixed(2) %></span>
+                        </div>
+                        
+                        <% if (typeof discountVal !== 'undefined' && discountVal > 0) { %>
+                            <div class="flex items-center justify-between text-red-600">
+                                <span>Promo Discount</span>
+                                <span class="font-mono font-bold">-₹<%= discountVal.toFixed(2) %></span>
+                            </div>
+                        <% } %>
+
+                        <div class="flex items-center justify-between">
+                            <span>Shipping & Air Cargo</span>
+                            <span class="font-mono font-bold text-luxury-950">
+                                <%= (typeof shippingCharge !== 'undefined' && shippingCharge === 0) ? 'FREE' : '₹' + (typeof shippingCharge !== 'undefined' ? shippingCharge : 0).toFixed(2) %>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span>Estimated GST (5%)</span>
+                            <span class="font-mono font-bold text-luxury-950">₹<%= (typeof taxVal !== 'undefined' ? taxVal : 0).toFixed(2) %></span>
+                        </div>
+
+                        <div class="border-t border-luxury-100 pt-4 flex items-center justify-between text-base font-display font-bold text-luxury-950">
+                            <span>Grand Total Price</span>
+                            <span class="font-mono text-lg text-luxury-900">₹<%= (typeof grandTotal !== 'undefined' ? grandTotal : 0).toFixed(2) %></span>
+                        </div>
+                    </div>
+
+                    <!-- Checkout navigation button -->
+                    <a href="/checkout" class="bg-luxury-950 hover:bg-luxury-900 text-white font-display font-semibold text-xs py-4 px-6 rounded-md shadow-lg text-center tracking-wider uppercase block transition-transform hover:scale-[1.01] mt-6">
+                        Proceed to Secure Checkout <i data-lucide="chevron-right" class="w-4 h-4 inline-block -mt-0.5 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>
